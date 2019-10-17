@@ -8,22 +8,21 @@ import { Post } from 'src/app/interfaces/interfaces';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-  
-  
+
   posts: Post[] = [];
-  habilitarScroll = false
+  habilitarScroll = false;
 
   constructor(private post: PostsService) {
-    
+
   }
 
   ngOnInit(): void {
     this.siguientes();
   }
 
-  siguientes(event?: any, pull: boolean = false) {            
-    this.post.getPosts(pull).subscribe( res => {      
-      console.log('respuesta',res);
+  siguientes(event?: any, pull: boolean = false) {
+    this.post.getPosts(pull).subscribe( res => {
+      console.log('respuesta', res);
       this.posts.push(...res.posts);
 
       if (event) {
@@ -31,7 +30,7 @@ export class Tab1Page implements OnInit {
         if (res.posts.length === 0) {
           this.habilitarScroll = true;
         }
-      }      
+      }
     });
   }
 

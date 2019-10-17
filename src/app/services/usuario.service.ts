@@ -15,9 +15,23 @@ export class UsuarioService {
 
   login(email: string, password: string) {
     const data = {email, password};
-
-    this.http.post(`${ URL }/user/login`, data).subscribe( (resp: any) => {
-      console.log(resp);
+    return new Promise( resolve => {
+      this.http.post(`${ URL }/user/login`, data).subscribe( (resp: any) => {
+        console.log(resp);
+        if (resp.ok) {
+          this.guardarToken(resp.token);
+          resolve(true);
+        } else {
+          this.token = null;
+          this.storage.clear();
+          resolve(false);
+        }
+      });
     });
+  }
+
+  async guardarToken(token: string) {
+    this.token = token;
+    await this.storage.set('token', token);
   }
 }
