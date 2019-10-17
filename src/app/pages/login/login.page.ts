@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { IonSlides } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -7,6 +8,9 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+
+  @ViewChild('slidePrincipal', {static: true})  slides: IonSlides;
+
   avatars = [
     {
       img: 'av-1.png',
@@ -41,16 +45,17 @@ export class LoginPage implements OnInit {
       seleccionado: false
     },
   ];
-  
+
   avatarSlide = {
     slidesPerView: 3.5
   };
   constructor() { }
 
   ngOnInit() {
+    this.slides.lockSwipes(true);
   }
 
-  login( fLogin: NgForm) {
+  login(fLogin: NgForm) {
     console.log(fLogin.valid);
   }
   registrar(fRegistro: NgForm) {
@@ -58,7 +63,19 @@ export class LoginPage implements OnInit {
   }
 
   seleccionarAvatar(avatar) {
-    this.avatars.forEach( av => av.seleccionado = false);
+    this.avatars.forEach(av => av.seleccionado = false);
     avatar.seleccionado = true;
+  }
+
+  mostrarregistro() {
+    this.slides.lockSwipes(false);
+    this.slides.slideTo(0);
+    this.slides.lockSwipes(true);
+  }
+
+  mostrarLogin() {
+    this.slides.lockSwipes(false);
+    this.slides.slideTo(1);
+    this.slides.lockSwipes(true);
   }
 }
