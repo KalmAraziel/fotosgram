@@ -11,14 +11,33 @@ export class Tab1Page implements OnInit {
   
   
   posts: Post[] = [];
+  habilitarScroll = false
+
   constructor(private post: PostsService) {
     
   }
 
   ngOnInit(): void {
-    this.post.getPosts().subscribe( res => {
-      console.log('posts',res);
+    this.siguientes();
+  }
+
+  siguientes(event?: any, pull: boolean = false) {            
+    this.post.getPosts(pull).subscribe( res => {      
+      console.log('respuesta',res);
       this.posts.push(...res.posts);
+
+      if (event) {
+        event.target.complete();
+        if (res.posts.length === 0) {
+          this.habilitarScroll = true;
+        }
+      }      
     });
+  }
+
+  recargar(event: any) {
+    this.habilitarScroll = false;
+    this.posts = [];
+    this.siguientes(event, true);
   }
 }
