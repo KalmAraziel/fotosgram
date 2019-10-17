@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IonSlides, NavController } from '@ionic/angular';
 import { UsuarioService } from '../../services/usuario.service';
+import { UiServiceService } from 'src/app/services/ui-service.service';
+import { Usuario } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-login',
@@ -56,9 +58,17 @@ export class LoginPage implements OnInit {
     password: '123456'
   };
 
+  nuevoUsuario: Usuario = {
+    email: 'test',
+    password: '123456',
+    nombre: 'test',
+    avatar: 'av-1.png'
+   };
+
   constructor(
     private userService: UsuarioService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private uiService: UiServiceService
     ) { }
 
   ngOnInit() {
@@ -75,10 +85,21 @@ export class LoginPage implements OnInit {
       this.navCtrl.navigateRoot('/main/tabs/tab1', { animated: true });
     } else {
       //  alerta error
+      this.uiService.alertaInformativa('Usuario y contraseña invalidos.');
     }
   }
-  registrar(fRegistro: NgForm) {
+
+  async registrar(fRegistro: NgForm) {
     console.log(fRegistro.valid);
+    if (!fRegistro.valid) { return; }
+    const valido = await this.userService.registro(this.nuevoUsuario);
+    if (valido) {
+      // navegar al tabs
+      this.navCtrl.navigateRoot('/main/tabs/tab1', { animated: true });
+    } else {
+      //  alerta error
+      this.uiService.alertaInformativa('el usuario ya existe.');
+    }
   }
 
   seleccionarAvatar(avatar) {
