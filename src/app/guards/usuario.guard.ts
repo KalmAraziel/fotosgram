@@ -6,7 +6,7 @@ import { UsuarioService } from '../services/usuario.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UsuarioGuard implements  CanLoad {
+export class UsuarioGuard implements CanLoad {
 
   constructor(private usuarioService: UsuarioService) {
 
