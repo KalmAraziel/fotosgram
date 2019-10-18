@@ -11,13 +11,22 @@ const URL = environment.url;
 export class UsuarioService {
 
   token: string = null;
-  usuario: Usuario = {};
+  private usuario: Usuario = {};
 
   constructor(
     private http: HttpClient,
     private storage: Storage,
     private navCtrl: NavController
   ) { }
+
+  getUsuario() {
+
+    if (!this.usuario._id) {
+      this.validarToken();
+    }
+
+    return {...this.usuario};
+  }
 
   login(email: string, password: string) {
     const data = {email, password};
