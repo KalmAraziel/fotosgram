@@ -9,7 +9,8 @@ export interface Post {
   mensaje?: string;
   coords?: string;
   usuario?: Usuario;
-  created?: string;  
+  created?: string;
+  posicion?: boolean;
 }
 
 export interface Usuario {

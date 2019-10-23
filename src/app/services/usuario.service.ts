@@ -31,10 +31,10 @@ export class UsuarioService {
   login(email: string, password: string) {
     const data = {email, password};
     return new Promise( resolve => {
-      this.http.post(`${ URL }/user/login`, data).subscribe( (resp: any) => {
+      this.http.post(`${ URL }/user/login`, data).subscribe( async ( resp: any) => {
         console.log(resp);
         if (resp.ok) {
-          this.guardarToken(resp.token);
+          await this.guardarToken(resp.token);
           resolve(true);
         } else {
           this.token = null;
@@ -45,11 +45,19 @@ export class UsuarioService {
     });
   }
 
+  logout() {
+    this.token = null;
+    this.usuario = null;
+    this.storage.clear();
+    
+    this.navCtrl.navigateRoot('/login', {animated: true});
+  }
+
   registro(usuario: Usuario) {
     return new Promise( resolve => {
-      this.http.post(`${ URL }/user/create`, usuario ).subscribe( (resp: any) => {
+      this.http.post(`${ URL }/user/create`, usuario ).subscribe( async (resp: any) => {
         if (resp.ok) {
-          this.guardarToken(resp.token);
+          await this.guardarToken(resp.token);
           resolve(true);
         } else {
           this.token = null;
@@ -63,6 +71,7 @@ export class UsuarioService {
   async guardarToken(token: string) {
     this.token = token;
     await this.storage.set('token', token);
+    await this.validarToken();
   }
 
   async cargarToken() {
@@ -99,9 +108,12 @@ export class UsuarioService {
   actualizarUsuario(usuario: Usuario): Promise<boolean> {
     const headers = new HttpHeaders({
       'x-token': this.token
-    });
+    });    
+
+    console.log('usuarioService: ', usuario);
     return new Promise<boolean>( resolve => {
-      this.http.put(`${ URL }(user/update`,  { usuario } , { headers }).subscribe( (resp: any) => {
+      this.http.put(`${ URL }/user/update`, usuario , { headers }).subscribe( (resp: any) => {
+        console.log('resp: ', resp);
         if (resp.ok) {
           this.guardarToken(resp.token);
           resolve(true);

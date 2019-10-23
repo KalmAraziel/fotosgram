@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { DomSaniPipe } from './dom-sani.pipe';
+import { ImageSanitizerPipe } from './image-sanitizer.pipe';
+import { ImagenPipe } from './imagen.pipe';
 
 
 
 @NgModule({
-  declarations: [DomSaniPipe],
+  declarations: [DomSaniPipe, ImageSanitizerPipe, ImagenPipe],
   exports: [
-    DomSaniPipe
+    DomSaniPipe,
+    ImageSanitizerPipe,
+    ImagenPipe
   ]
 })
 export class PipesModule { }
